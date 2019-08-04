@@ -15,7 +15,7 @@ import org.bouncycastle.openpgp.PGPSecretKeyRingCollection;
 import org.bouncycastle.openpgp.PGPUtil;
 import org.bouncycastle.openpgp.operator.jcajce.JcaKeyFingerprintCalculator;
 
-public final class KeyUtil {
+public final class PGPKeyUtil {
 
     public static PGPPublicKey findPublicKey(final InputStream input) throws IOException, PGPException {
         return findKey(new PublicKey(input));

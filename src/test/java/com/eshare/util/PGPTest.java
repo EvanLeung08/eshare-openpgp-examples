@@ -11,10 +11,10 @@ import org.junit.Test;
 
 public class PGPTest {
 
-  public static final String PASSPHRASE = "unittest";
+  public static final String PASSWORD = "123456";
 
-  public static final String PUBLIC_KEY_FILE = "pub.pgp";
-  public static final String PRIVATE_KEY_FILE = "secret.pgp";
+  public static final String PUBLIC_KEY_FILE = "pub.gpg";
+  public static final String PRIVATE_KEY_FILE = "secret.gpg";
 
   @Test
   public void encryptAndDecryptUsingMockKey() throws IOException, PGPException {
@@ -22,12 +22,13 @@ public class PGPTest {
     System.out.println("Before encryption:" + secret);
     final byte[] encrypted = PGP.encrypt(
         secret.getBytes(),
-        KeyUtil.findPublicKey(findFile(PUBLIC_KEY_FILE)));
+        PGPKeyUtil.findPublicKey(findFile(PUBLIC_KEY_FILE)));
     System.out.println("After encryption:" + new String(encrypted));
+    //Password should be the same with certificate
     final byte[] decrypted = PGP.decrypt(
         encrypted,
         findFile(PRIVATE_KEY_FILE),
-        PASSPHRASE);
+        PASSWORD);
     System.out.println("After Decryption:" + new String(decrypted));
     assertEquals(secret, new String(decrypted));
   }
@@ -38,16 +39,21 @@ public class PGPTest {
     final String secret = UUID.randomUUID().toString();
     final byte[] encrypted = PGP.encrypt(
         secret.getBytes(),
-        KeyUtil.findPublicKey(findFile(PUBLIC_KEY_FILE)),
-        KeyUtil.findPublicKeyFromPrivate(findFile(PRIVATE_KEY_FILE)));
+        PGPKeyUtil.findPublicKey(findFile(PUBLIC_KEY_FILE)),
+        PGPKeyUtil.findPublicKeyFromPrivate(findFile(PRIVATE_KEY_FILE)));
+    //Password should be the same with certificate
     final byte[] decrypted = PGP.decrypt(
         encrypted,
         findFile(PRIVATE_KEY_FILE),
-        PASSPHRASE);
+        PASSWORD);
     assertEquals(secret, new String(decrypted));
   }
 
   public static InputStream findFile(final String file) {
     return PGPTest.class.getClassLoader().getResourceAsStream(file);
   }
+
+
+
+
 }

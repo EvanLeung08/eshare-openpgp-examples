@@ -1,5 +1,7 @@
 package com.eshare.util;
 
+import com.eshare.crypto.impl.PGPKeyPairGenerator;
+import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -10,19 +12,12 @@ import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
 import java.security.Security;
 import java.security.SignatureException;
-
-import java.security.interfaces.RSAPublicKey;
-import java.util.Base64;
-import java.util.Base64.Encoder;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.bouncycastle.openpgp.PGPException;
-import org.bouncycastle.openpgp.PGPPrivateKey;
-import org.bouncycastle.openpgp.PGPPublicKey;
-import org.junit.Assert;
 import org.junit.Test;
 
 
-public class OpenPGPCryptoTest {
+public class CryptoSampleTest {
 
   private boolean isArmored = false;
   private String id = "evan";
@@ -30,8 +25,8 @@ public class OpenPGPCryptoTest {
   private boolean integrityCheck = true;
 
 
-  private String pubKeyFile = "/tmp/pub.pgp";
-  private String privKeyFile = "/tmp/secret.pgp";
+  private String pubKeyFile = "/tmp/pub.gpg";
+  private String privKeyFile = "/tmp/secret.gpg";
   //create a text file to be encripted, before run the tests
   private String contentTextFile = "/tmp/content.txt";
   private String encryptedTextFile = "/tmp/encrypted-text.dat";
@@ -54,18 +49,42 @@ public class OpenPGPCryptoTest {
 
     FileOutputStream out1 = new FileOutputStream(privKeyFile);
     FileOutputStream out2 = new FileOutputStream(pubKeyFile);
-    Encoder encoder = Base64.getEncoder();
     rkpg.exportKeyPair(out1, out2, kp.getPublic(), kp.getPrivate(), id, passwd.toCharArray(),
         isArmored);
 
   }
 
   @Test
+  public void testBaseKeyPairGenerator()
+      throws InvalidKeyException, NoSuchProviderException, SignatureException, IOException, PGPException, NoSuchAlgorithmException {
+
+    PGPKeyPairGenerator pgpKeyPairGenerator = new PGPKeyPairGenerator();
+    ByteArrayOutputStream outPublicKey = new ByteArrayOutputStream();
+    ByteArrayOutputStream outPrivateKey = new ByteArrayOutputStream();
+    pgpKeyPairGenerator.generateKeyPair(id,passwd,outPublicKey,outPrivateKey);
+    System.out.println(new String(outPublicKey.toByteArray()));
+    System.out.println(new String(outPrivateKey.toByteArray()));
+  }
+
+  @Test
+  public void testPGPKeyPairGenerator()
+      throws InvalidKeyException, NoSuchProviderException, SignatureException, IOException, PGPException, NoSuchAlgorithmException {
+
+    PGPKeyPairGenerator pgpKeyPairGenerator = new PGPKeyPairGenerator();
+    ByteArrayOutputStream outPublicKey = new ByteArrayOutputStream();
+    ByteArrayOutputStream outPrivateKey = new ByteArrayOutputStream();
+    pgpKeyPairGenerator.generateKeyPair(id,passwd,2048,outPublicKey,outPrivateKey);
+    System.out.println(new String(outPublicKey.toByteArray()));
+    System.out.println(new String(outPrivateKey.toByteArray()));
+  }
+
+
+  @Test
   public void testEncrypt() throws NoSuchProviderException, IOException, PGPException {
     FileInputStream pubKeyIs = new FileInputStream(pubKeyFile);
     FileOutputStream cipheredFileIs = new FileOutputStream(encryptedTextFile);
     PGPCryptoHelper.getInstance().encryptFile(cipheredFileIs, contentTextFile,
-        PGPKeyHelper.readPublicKey(pubKeyIs), isArmored, integrityCheck);
+        PGPKeyUtil.findPublicKey(pubKeyIs), isArmored, integrityCheck);
     cipheredFileIs.close();
     pubKeyIs.close();
   }
@@ -96,18 +115,6 @@ public class OpenPGPCryptoTest {
         .createSignature(contentTextFile, privKeyIn, signatureOut, passwd.toCharArray(), true);
     PGPCryptoHelper.getInstance().verifySignature(contentTextFile, sig, pubKeyIs);
   }
-
-  @Test
-  public void testEncryptMessage() throws IOException, PGPException, NoSuchProviderException {
-    String content = "大家好，我来自中国";
-    PGPPublicKey publicKey = PGPKeyHelper.readPublicKey(pubKeyFile);
-    String encodeString = PGPCryptoHelper.getInstance()
-        .encryptMessageAndEncode(content, publicKey);
-    System.out.println(encodeString);
-    Assert.assertNotNull(encodeString);
-
-  }
-
 
 
 }

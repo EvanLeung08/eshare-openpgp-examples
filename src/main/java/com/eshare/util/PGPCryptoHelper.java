@@ -48,6 +48,7 @@ import org.bouncycastle.openpgp.PGPSignatureList;
 import org.bouncycastle.openpgp.PGPUtil;
 import org.bouncycastle.openpgp.operator.PBESecretKeyDecryptor;
 import org.bouncycastle.openpgp.operator.PublicKeyDataDecryptorFactory;
+import org.bouncycastle.openpgp.operator.bc.BcKeyFingerprintCalculator;
 import org.bouncycastle.openpgp.operator.jcajce.JcaKeyFingerprintCalculator;
 import org.bouncycastle.openpgp.operator.jcajce.JcaPGPContentSignerBuilder;
 import org.bouncycastle.openpgp.operator.jcajce.JcaPGPContentVerifierBuilderProvider;
@@ -291,7 +292,7 @@ public class PGPCryptoHelper {
     if (o instanceof PGPCompressedData) {
       PGPCompressedData c1 = (PGPCompressedData) o;
 
-      pgpFact = new PGPObjectFactory(c1.getDataStream(), new JcaKeyFingerprintCalculator());
+      pgpFact = new PGPObjectFactory(c1.getDataStream(),  new BcKeyFingerprintCalculator());
 
       p3 = (PGPSignatureList) pgpFact.nextObject();
     } else {

@@ -1,8 +1,8 @@
 package com.eshare.util;
 
-import static com.eshare.util.KeyUtil.findPublicKey;
-import static com.eshare.util.KeyUtil.findPublicKeyFromPrivate;
-import static com.eshare.util.KeyUtil.findSecretKey;
+import static com.eshare.util.PGPKeyUtil.findPublicKey;
+import static com.eshare.util.PGPKeyUtil.findPublicKeyFromPrivate;
+import static com.eshare.util.PGPKeyUtil.findSecretKey;
 import static com.eshare.util.PGPTest.findFile;
 import static org.junit.Assert.assertTrue;
 
@@ -11,7 +11,7 @@ import java.io.IOException;
 import org.bouncycastle.openpgp.PGPException;
 import org.junit.Test;
 
-public class KeyUtilTest {
+public class PGPKeyUtilTest {
 
     @Test
     public void testFindPublicKeyFromPrivate() throws IOException, PGPException {
