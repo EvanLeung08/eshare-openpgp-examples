@@ -32,10 +32,10 @@ public class PGPMessageSignerVerifyTest {
   @Parameterized.Parameters
   public static Collection<Object[]> data() {
     return Arrays.asList(new Object[][]{
-        {"testcase-1-pub.asc", "test-message.txt", "test-message.txt.tc1.sig", true},
-        {"testcase-2-pub.asc", "test-message.txt", "test-message.txt.tc2.sig", true},
-        {"testcase-1-pub.asc", "test-message.txt", "test-message.txt.tc2.sig", false},
-        {"testcase-2-pub.asc", "test-message.txt", "test-message.txt.tc1.sig", false}
+        {"testcase-1-pub.bgp", "test-message.txt", "test-message.txt.tc1.sig", true},
+        {"testcase-2-pub.bgp", "test-message.txt", "test-message.txt.tc2.sig", true},
+        {"testcase-1-pub.bgp", "test-message.txt", "test-message.txt.tc2.sig", false},
+        {"testcase-2-pub.bgp", "test-message.txt", "test-message.txt.tc1.sig", false}
     });
   }
 

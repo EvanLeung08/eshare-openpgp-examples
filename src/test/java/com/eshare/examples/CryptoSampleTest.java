@@ -1,6 +1,10 @@
-package com.eshare.util;
+package com.eshare.examples;
 
 import com.eshare.crypto.impl.PGPKeyPairGenerator;
+import com.eshare.util.PGPCryptoHelper;
+import com.eshare.util.PGPKeyUtil;
+import com.eshare.util.PGPTest;
+import com.eshare.util.RSAKeyPairGenerator;
 import java.io.ByteArrayOutputStream;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -19,14 +23,13 @@ import org.junit.Test;
 
 public class CryptoSampleTest {
 
-  private boolean isArmored = false;
-  private String id = "evan";
-  private String passwd = "123456";
+  private boolean isArmored = true;
   private boolean integrityCheck = true;
 
 
-  private String pubKeyFile = "/tmp/pub.gpg";
-  private String privKeyFile = "/tmp/secret.gpg";
+  private String pubKeyFile = "/tmp/pub.asc";
+  private String privKeyFile = "/tmp/secret.asc"
+      + "";
   //create a text file to be encripted, before run the tests
   private String contentTextFile = "/tmp/content.txt";
   private String encryptedTextFile = "/tmp/encrypted-text.dat";
@@ -49,7 +52,7 @@ public class CryptoSampleTest {
 
     FileOutputStream out1 = new FileOutputStream(privKeyFile);
     FileOutputStream out2 = new FileOutputStream(pubKeyFile);
-    rkpg.exportKeyPair(out1, out2, kp.getPublic(), kp.getPrivate(), id, passwd.toCharArray(),
+    rkpg.exportKeyPair(out1, out2, kp, PGPTest.ID, PGPTest.PASSWORD.toCharArray(),
         isArmored);
 
   }
@@ -61,7 +64,7 @@ public class CryptoSampleTest {
     PGPKeyPairGenerator pgpKeyPairGenerator = new PGPKeyPairGenerator();
     ByteArrayOutputStream outPublicKey = new ByteArrayOutputStream();
     ByteArrayOutputStream outPrivateKey = new ByteArrayOutputStream();
-    pgpKeyPairGenerator.generateKeyPair(id,passwd,outPublicKey,outPrivateKey);
+    pgpKeyPairGenerator.generateKeyPair(PGPTest.ID,PGPTest.PASSWORD,outPublicKey,outPrivateKey);
     System.out.println(new String(outPublicKey.toByteArray()));
     System.out.println(new String(outPrivateKey.toByteArray()));
   }
@@ -73,7 +76,7 @@ public class CryptoSampleTest {
     PGPKeyPairGenerator pgpKeyPairGenerator = new PGPKeyPairGenerator();
     ByteArrayOutputStream outPublicKey = new ByteArrayOutputStream();
     ByteArrayOutputStream outPrivateKey = new ByteArrayOutputStream();
-    pgpKeyPairGenerator.generateKeyPair(id,passwd,2048,outPublicKey,outPrivateKey);
+    pgpKeyPairGenerator.generateKeyPair(PGPTest.ID,PGPTest.PASSWORD,2048,outPublicKey,outPrivateKey);
     System.out.println(new String(outPublicKey.toByteArray()));
     System.out.println(new String(outPrivateKey.toByteArray()));
   }
@@ -96,7 +99,7 @@ public class CryptoSampleTest {
     FileInputStream privKeyIn = new FileInputStream(privKeyFile);
     FileOutputStream contentTextFileIs = new FileOutputStream(decryptedTextFile);
     PGPCryptoHelper.getInstance()
-        .decryptFile(cipheredFileIs, contentTextFileIs, privKeyIn, passwd.toCharArray());
+        .decryptFile(cipheredFileIs, contentTextFileIs, privKeyIn, PGPTest.PASSWORD.toCharArray());
     cipheredFileIs.close();
     contentTextFileIs.close();
     privKeyIn.close();
@@ -109,10 +112,9 @@ public class CryptoSampleTest {
     FileInputStream plainTextInput = new FileInputStream(contentTextFile);
     FileOutputStream signatureOut = new FileOutputStream(signatureFile);
 
-    byte[] bIn = PGPCryptoHelper.getInstance().inputStreamToByteArray(plainTextInput);
     byte[] sig = PGPCryptoHelper
         .getInstance()
-        .createSignature(contentTextFile, privKeyIn, signatureOut, passwd.toCharArray(), true);
+        .createSignature(contentTextFile, privKeyIn, signatureOut, PGPTest.PASSWORD.toCharArray(), true);
     PGPCryptoHelper.getInstance().verifySignature(contentTextFile, sig, pubKeyIs);
   }
 

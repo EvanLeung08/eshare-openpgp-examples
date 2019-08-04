@@ -226,39 +226,6 @@ public class PGPCryptoHelper {
   }
 
 
-  /**
-   * cncrypt the passed in message stream
-   */
-  public String encryptMessageAndEncode(String message,
-      PGPPublicKey encKey)
-      throws IOException, NoSuchProviderException, PGPException {
-    Security.addProvider(new BouncyCastleProvider());
-
-    ByteArrayOutputStream out = new ByteArrayOutputStream();
-    JcePGPDataEncryptorBuilder c = new JcePGPDataEncryptorBuilder(PGPEncryptedData.CAST5)
-        .setSecureRandom(new SecureRandom())
-        .setProvider(BouncyCastleProvider.PROVIDER_NAME);
-
-    PGPEncryptedDataGenerator cPk = new PGPEncryptedDataGenerator(c);
-
-    JcePublicKeyKeyEncryptionMethodGenerator d = new JcePublicKeyKeyEncryptionMethodGenerator(
-        encKey).setProvider(new BouncyCastleProvider()).setSecureRandom(new SecureRandom());
-
-    cPk.addMethod(d);
-
-    byte[] bytes = message.getBytes();
-    OutputStream cOut = cPk.open(out, bytes.length);
-    cOut.write(bytes);
-    cOut.close();
-    out.close();
-    Encoder encoder = Base64.getEncoder();
-    return encoder.encodeToString(bytes);
-
-  }
-
-
-
-
   public byte[] inputStreamToByteArray(InputStream is) throws IOException {
 
     ByteArrayOutputStream buffer = new ByteArrayOutputStream();

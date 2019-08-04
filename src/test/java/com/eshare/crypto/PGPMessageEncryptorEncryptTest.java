@@ -35,8 +35,8 @@ public class PGPMessageEncryptorEncryptTest {
   @Parameterized.Parameters
   public static Collection<Object[]> data() {
     return Arrays.asList( new Object[][] {
-        { "testcase-1-pub.asc", "testcase-1-sec.asc", "testcase-1@sniggleme.info", "test-message.txt" },
-        { "testcase-2-pub.asc", "testcase-2-sec.asc", "testcase-2@sniggleme.info", "test-message.txt" }
+        { "testcase-1-pub.bgp", "testcase-1-sec.asc", "testcase-1@sniggleme.info", "test-message.txt" },
+        { "testcase-2-pub.bgp", "testcase-2-sec.asc", "testcase-2@sniggleme.info", "test-message.txt" }
     });
   }
 

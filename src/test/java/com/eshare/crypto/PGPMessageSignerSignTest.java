@@ -33,8 +33,8 @@ public class PGPMessageSignerSignTest {
   @Parameterized.Parameters
   public static Collection<Object[]> data() {
     return Arrays.asList(new Object[][]{
-        { "Test Case 1", "testcase-1-sec.asc", "testcase-1-pub.asc", "test-message.txt" },
-        { "Test Case 2", "testcase-2-sec.asc", "testcase-2-pub.asc", "test-message.txt" }
+        { "Test Case 1", "testcase-1-sec.asc", "testcase-1-pub.bgp", "test-message.txt" },
+        { "Test Case 2", "testcase-2-sec.asc", "testcase-2-pub.bgp", "test-message.txt" }
     });
   }
 

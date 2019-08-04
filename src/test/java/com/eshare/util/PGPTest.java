@@ -2,15 +2,19 @@ package com.eshare.util;
 
 import static org.junit.Assert.assertEquals;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.UUID;
 
+import org.apache.commons.io.FileUtils;
 import org.bouncycastle.openpgp.PGPException;
 import org.junit.Test;
 
 public class PGPTest {
 
+  public static final String ID = "123";
   public static final String PASSWORD = "123456";
 
   public static final String PUBLIC_KEY_FILE = "pub.gpg";
@@ -52,8 +56,6 @@ public class PGPTest {
   public static InputStream findFile(final String file) {
     return PGPTest.class.getClassLoader().getResourceAsStream(file);
   }
-
-
 
 
 }
